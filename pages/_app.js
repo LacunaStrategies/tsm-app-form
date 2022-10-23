@@ -1,7 +1,63 @@
-import '../styles/globals.css'
+import { SessionProvider } from "next-auth/react"
+import { WagmiConfig, createClient, defaultChains, configureChains } from 'wagmi'
 
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+import { alchemyProvider } from 'wagmi/providers/alchemy'
+import { publicProvider } from 'wagmi/providers/public'
+
+import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
+import { InjectedConnector } from 'wagmi/connectors/injected'
+import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
+import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
+
+// Configure chains & providers with the Alchemy provider.
+// Two popular providers are Alchemy (alchemy.com) and Infura (infura.io)
+const { chains, provider, webSocketProvider } = configureChains(defaultChains, [
+  // alchemyProvider({ apiKey: process.env.ALCHEMY_API_KEY }),
+  publicProvider(),
+])
+
+// Set up client
+const client = createClient({
+  autoConnect: true,
+  connectors: [
+    new MetaMaskConnector({ chains }),
+    new CoinbaseWalletConnector({
+      chains,
+      options: {
+        appName: 'wagmi',
+      },
+    }),
+    new WalletConnectConnector({
+      chains,
+      options: {
+        qrcode: true,
+      },
+    }),
+    new InjectedConnector({
+      chains,
+      options: {
+        name: 'Injected',
+        shimDisconnect: true,
+      },
+    }),
+  ],
+  provider,
+  webSocketProvider,
+})
+
+import '../styles/globals.scss'
+
+function MyApp({
+  Component,
+  pageProps: { session, ...pageProps }
+}) {
+  return (
+    <SessionProvider session={session}>
+      <WagmiConfig client={client}>
+        <Component {...pageProps} />
+      </WagmiConfig>
+    </SessionProvider>
+  )
 }
 
 export default MyApp

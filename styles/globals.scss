@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Jura:wght@400;600;700&family=Roboto:wght@100;400;700&display=swap');
+
+$primaryColor: #f6f3ea;
+$secondaryColor: #0f3d68;
+
+@font-face {
+  font-family: 'LULO Clean';
+  src: url('/assets/fonts/lulo-clean-one-bold.ttf');
+}
+
+body {
+  background: $primaryColor;
+  font-family: 'Roboto', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'LULO Clean', sans-serif;
+}
+
+button, a {
+  font-family: 'Jura', sans-serif;
+}
+
+button div {
+  font-family: 'Roboto', sans-serif;
+}
