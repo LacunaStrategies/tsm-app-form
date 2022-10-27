@@ -59,7 +59,7 @@ function Page() {
             {
                 applications.map((application) => {
                     if (search !== '') {
-                        if ( application.wallet.toLowerCase().indexOf(search.toLowerCase()) > -1 || application.twitter.toLowerCase().indexOf(search.toLowerCase()) > -1) {
+                        if ( application.wallet.toLowerCase().indexOf(search.toLowerCase()) > -1 || application.twitter.toLowerCase().indexOf(search.toLowerCase()) > -1 || application.q0.toLowerCase().indexOf(search.toLowerCase()) > -1) {
                             return (
                                 <div
                                     key={application._id}
@@ -73,6 +73,10 @@ function Page() {
                                         <div>
                                             <strong>Wallet Address: </strong>
                                             {application.wallet}
+                                        </div>
+                                        <div>
+                                            <strong>Wallet Address: </strong>
+                                            {application.q0}
                                         </div>
                                         <div>
                                             <strong>Status: </strong>
