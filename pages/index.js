@@ -65,7 +65,7 @@ export default function Home() {
 
     // If only wallet is connected, set phase to Twitter Connect
     } else if (isConnected) {
-      setPhase(2)
+      setPhase(1)
 
     // Set phase to Wallet Connect 
     } else {
