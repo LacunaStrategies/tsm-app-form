@@ -71,12 +71,12 @@ function Page() {
                                             {application.twitter}
                                         </div>
                                         <div>
-                                            <strong>Wallet Address: </strong>
-                                            {application.wallet}
+                                            <strong>Discord ID: </strong>
+                                            {application.q0}
                                         </div>
                                         <div>
                                             <strong>Wallet Address: </strong>
-                                            {application.q0}
+                                            {application.wallet}
                                         </div>
                                         <div>
                                             <strong>Status: </strong>
