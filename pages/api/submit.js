@@ -21,7 +21,7 @@ export default async function submit(req, res) {
 
       // Variables
       const body = req.body;
-      const requiredFields = ['wallet', 'twitter', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6']
+      const requiredFields = ['wallet', 'twitter', 'q0,', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6']
 
       let failedValidation = false
       let invalidFields = 'The following fields are required: '

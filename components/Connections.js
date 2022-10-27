@@ -19,7 +19,7 @@ const Connections = ({ address, session }) => {
     const { disconnect } = useDisconnect() 
 
     return (
-        <div className="px-4 w-full max-w-[280px] mx-auto md:ml-auto md:mr-0 md:py-4">
+        <div className="px-4 w-full max-w-[280px] mx-auto md:py-4">
             <div className="bg-sportsBlue text-sportsTan py-2 px-5 w-full text-center shadow-black shadow-md">
                 <div className="flex items-center justify-center mb-4">
                     <Image

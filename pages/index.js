@@ -21,6 +21,7 @@ import WagmiConnect from '../components/WagmiConnect'
 import LightningBolt from '../components/LightningBolt'
 import Spacer from '../components/Spacer'
 import Confirmation from '../components/Confirmation'
+import Image from 'next/image'
 
 export default function Home() {
 
@@ -32,6 +33,7 @@ export default function Home() {
   const [values, setValues] = useState({
     wallet: '',
     twitter: '',
+    q0: '',
     q1: '',
     q2: '',
     q3: '',
@@ -63,7 +65,7 @@ export default function Home() {
 
     // If only wallet is connected, set phase to Twitter Connect
     } else if (isConnected) {
-      setPhase(1)
+      setPhase(2)
 
     // Set phase to Wallet Connect 
     } else {
@@ -79,8 +81,10 @@ export default function Home() {
     <div className="min-h-screen flex flex-col justify-center items-center pt-[200px] pb-[50px] md:pt-[125px] md:pb-[125px] px-4">
 
       {/* Top Section (Logo, Progress Bar, Connections) */}
-      <header className="absolute w-full top-0 flex flex-wrap md:flex-nowrap">
-        <div className="hidden md:block md:w-1/3"></div>
+      <header className="absolute w-full top-0 flex flex-wrap md:flex-nowrap items-center">
+        <div className="hidden md:block md:w-1/3 text-center">
+          <Image src="/assets/images/SMLogo_Transparent.webp" alt="The Sports Meta Logo" height={55} width={62} />
+        </div>
         <ul id="lightningBolts" className="w-full py-5 px-5 flex items-center justify-center md:w-1/3">
           <LightningBolt active={phase === 0} filled={phase >= 0} />
           <Spacer />
