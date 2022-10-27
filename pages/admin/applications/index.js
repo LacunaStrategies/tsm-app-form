@@ -1,6 +1,5 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
-import trimString from "../../../utils/trimString"
 
 function Page() {
 
@@ -59,7 +58,7 @@ function Page() {
             {
                 applications.map((application) => {
                     if (search !== '') {
-                        if ( application.wallet.toLowerCase().indexOf(search.toLowerCase()) > -1 || application.twitter.toLowerCase().indexOf(search.toLowerCase()) > -1 || application.q0.toLowerCase().indexOf(search.toLowerCase()) > -1) {
+                        if (application.wallet.toLowerCase().indexOf(search.toLowerCase()) > -1 || application.twitter.toLowerCase().indexOf(search.toLowerCase()) > -1 || application.q0.toLowerCase().indexOf(search.toLowerCase()) > -1) {
                             return (
                                 <div
                                     key={application._id}
@@ -80,7 +79,7 @@ function Page() {
                                         </div>
                                         <div>
                                             <strong>Status: </strong>
-                                            <span className={`${application.status === 'Pending' ? 'text-yellow-300' : application.status === 'Approved' ? 'text-green-700' : 'text-red-500' }`}>{application.status}</span>
+                                            <span className={`${application.status === 'Pending' ? 'text-yellow-300' : application.status === 'Approved' ? 'text-green-700' : 'text-red-500'}`}>{application.status}</span>
                                         </div>
                                     </div>
                                     {
@@ -118,12 +117,16 @@ function Page() {
                                         {application.twitter}
                                     </div>
                                     <div>
+                                        <strong>Discord ID: </strong>
+                                        {application.q0}
+                                    </div>
+                                    <div>
                                         <strong>Wallet Address: </strong>
                                         {application.wallet}
                                     </div>
                                     <div>
                                         <strong>Status: </strong>
-                                        <span className={`${application.status === 'Pending' ? 'text-yellow-300' : application.status === 'Approved' ? 'text-green-700' : 'text-red-500' }`}>{application.status}</span>
+                                        <span className={`${application.status === 'Pending' ? 'text-yellow-300' : application.status === 'Approved' ? 'text-green-700' : 'text-red-500'}`}>{application.status}</span>
                                     </div>
                                 </div>
                                 {
