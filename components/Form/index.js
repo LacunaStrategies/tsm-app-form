@@ -126,8 +126,8 @@ const Form = ({ address, session, setPhase, setValues, values }) => {
                                 exit={{ opacity: 0 }}
                                 key="q2"
                             >
-                                <h2 id="questionTitle" className="font-semibold uppercase text-xl mb-4 max-w-lg mx-auto">Discord ID</h2>
-                                <div id="questionDesc" className="mb-9 max-w-sm mx-auto font-thin text-sm">Enter your Discord ID Below</div>
+                                <h2 id="questionTitle" className="font-semibold uppercase text-xl mb-4 max-w-lg mx-auto">What's Your Discord?</h2>
+                                <div id="questionDesc" className="mb-9 max-w-sm mx-auto font-thin text-sm">Enter your Discord ID Below (ex. elitescout#7777)</div>
                                 <div id="questionContent">
                                     <input
                                         className="border border-sportsGray outline-none rounded-xl p-9 w-full max-w-xl bg-transparent"
@@ -229,7 +229,7 @@ const Form = ({ address, session, setPhase, setValues, values }) => {
                                 key="q4"
                             >
                                 <h2 id="questionTitle" className="font-semibold uppercase text-xl mb-4 max-w-lg mx-auto">Why do you want to be in The Sports Metaverse?<span className="text-red-700">*</span></h2>
-                                <div id="questionDesc" className="mb-9 max-w-sm mx-auto font-thin text-sm">What you hope to get out of this community. What you hope to add.</div>
+                                <div id="questionDesc" className="mb-9 max-w-sm mx-auto font-thin text-sm">What you hope to get out of this community and what you hope to add.</div>
                                 <div id="questionContent">
                                     <textarea
                                         className="border border-sportsGray outline-none rounded-xl p-9 w-full max-w-xl bg-transparent"
@@ -251,7 +251,7 @@ const Form = ({ address, session, setPhase, setValues, values }) => {
                                 exit={{ opacity: 0 }}
                                 key="q5"
                             >
-                                <h2 id="questionTitle" className="font-semibold uppercase text-xl mb-4 max-w-lg mx-auto">What&apos;s your favorite sport team (1 only please)?<span className="text-red-700">*</span></h2>
+                                <h2 id="questionTitle" className="font-semibold uppercase text-xl mb-4 max-w-lg mx-auto">What&apos;s your favorite sports team (1 only please)?<span className="text-red-700">*</span></h2>
                                 <div id="questionDesc" className="mb-9 max-w-sm mx-auto font-thin text-sm">	Please don&apos;t tell us it&apos;s the Dallas Cowboys.</div>
                                 <div id="questionContent">
                                     <textarea
@@ -275,7 +275,7 @@ const Form = ({ address, session, setPhase, setValues, values }) => {
                                 key="q6"
                             >
                                 <h2 id="questionTitle" className="font-semibold uppercase text-xl mb-4 max-w-lg mx-auto">If chosen, who would you recruit to be on your scout team (2 friends)?<span className="text-red-700">*</span></h2>
-                                <div id="questionDesc" className="mb-9 max-w-sm mx-auto font-thin text-sm">Who you think would be a good addition to our community.</div>
+                                <div id="questionDesc" className="mb-9 max-w-sm mx-auto font-thin text-sm">Who you think would be a good addition to our community. Please add their Twitter handles, if applicable.</div>
                                 <div id="questionContent">
                                     <textarea
                                         className="border border-sportsGray outline-none rounded-xl p-9 w-full max-w-xl bg-transparent"
