@@ -1,6 +1,9 @@
 // ** React Imports
 import { useEffect, useState } from 'react'
 
+// ** NextJS Imports
+import { useRouter } from 'next/router'
+
 // ** NextAuth Imports
 import { useSession } from 'next-auth/react'
 
@@ -24,6 +27,8 @@ import Confirmation from '../components/Confirmation'
 import Image from 'next/image'
 
 export default function Home() {
+
+  const router = useRouter()
 
   // Hooks
   const { data: session } = useSession()
@@ -65,6 +70,10 @@ export default function Home() {
         setPhase(resp.data.phase)
       }
       checkApplication()
+
+      // If application status is approved, redirect
+      if (phase === "Approved")
+        router.push('/my-team')
 
     // If only wallet is connected, set phase to Twitter Connect
     } else if (isConnected) {
