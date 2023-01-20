@@ -1,8 +1,10 @@
 import clientPromise from '/lib/mongodb'
+import { getToken } from 'next-auth/jwt'
 
 export default async function getApplications(req, res) {
     const { method } = req
     const { twitterHandle } = req.query
+    const token = await getToken({ req })
 
     const client = await clientPromise
     const db = client.db('sports')
@@ -16,7 +18,7 @@ export default async function getApplications(req, res) {
             if (application)
                 phase = 3
 
-            res.status(200).json({ phase, status: application.status })
+            res.status(200).json({ phase, status: application.status, token })
             break;
 
         default:
