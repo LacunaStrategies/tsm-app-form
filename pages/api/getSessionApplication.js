@@ -16,7 +16,7 @@ export default async function getApplications(req, res) {
             if (application)
                 phase = 3
 
-            res.status(200).json({ phase })
+            res.status(200).json({ phase, status: application.status })
             break;
 
         default:

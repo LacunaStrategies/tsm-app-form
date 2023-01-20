@@ -126,7 +126,7 @@ const Form = ({ address, session, setPhase, setValues, values }) => {
                                 exit={{ opacity: 0 }}
                                 key="q2"
                             >
-                                <h2 id="questionTitle" className="font-semibold uppercase text-xl mb-4 max-w-lg mx-auto">What's Your Discord?</h2>
+                                <h2 id="questionTitle" className="font-semibold uppercase text-xl mb-4 max-w-lg mx-auto">What&apos;s Your Discord?</h2>
                                 <div id="questionDesc" className="mb-9 max-w-sm mx-auto font-thin text-sm">Enter your Discord ID Below (ex. elitescout#7777)</div>
                                 <div id="questionContent">
                                     <input
