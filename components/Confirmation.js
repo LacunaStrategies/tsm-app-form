@@ -1,4 +1,4 @@
-const Confirmation = () => {
+const Confirmation = ({status}) => {
     return (
         <>
             <div className="text-5xl mb-4">🎉</div>
@@ -23,6 +23,10 @@ const Confirmation = () => {
                     <img src="/assets/images/twitter-icon.webp" width={35} height={27} alt="Twitter Icon" />
                     <span className="ml-2">Twitter</span>
                 </a>
+            </div>
+            <div className="mt-8 mb-4 py-4 border-t border-b border-black lg:max-w-[80%] mx-auto flex items-center justify-between">
+                <div className="font-thin">Status:</div>
+                <div className={`py-2 px-3 rounded-lg ${status === 'Pending' ? 'bg-yellow-200 text-yellow-600' : 'bg-red-300 text-red-700'}`}>{status === 'Pending' ? 'Under Review' : 'Rejected'}</div>
             </div>
         </>
     );

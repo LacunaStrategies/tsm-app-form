@@ -44,6 +44,7 @@ export default function Home() {
   })
   const [isMounted, setIsMounted] = useState(false)
   const [phase, setPhase] = useState(0)
+  const [status, setStatus] = useState('Pending')
 
   // Confirm component is mounted
   useEffect(() => {
@@ -59,6 +60,8 @@ export default function Home() {
       // Check for existing application and set phase to Form or Congratulations accordingly
       const checkApplication = async () => {
         const resp = await axios.get(`/api/getSessionApplication?twitterHandle=${session.twitter.twitterHandle}`)
+
+        setStatus(resp.data.status)
         setPhase(resp.data.phase)
       }
       checkApplication()
@@ -159,7 +162,9 @@ export default function Home() {
             exit={{ opacity: 0 }}
             key="phase4"
           >
-            <Confirmation />
+            <Confirmation 
+              status={status}
+            />
           </motion.div>
         }
       </AnimatePresence>
