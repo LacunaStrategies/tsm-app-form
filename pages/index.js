@@ -66,6 +66,7 @@ export default function Home() {
       const checkApplication = async () => {
         const resp = await axios.get(`/api/getSessionApplication?twitterHandle=${session.twitter.twitterHandle}`)
 
+        console.log(resp)
         setStatus(resp.data.status)
         setPhase(resp.data.phase)
       }
