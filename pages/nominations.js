@@ -80,7 +80,7 @@ const Nominations = () => {
         }
     }
 
-    if (pageLoading || status === 'loading')
+    if (pageLoading)
         return (
             <div className="bg-sportsBlue min-h-screen flex flex-col justify-center items-center pt-[200px] pb-[50px] md:pt-[125px] md:pb-125px]">
                 <div className="container mx-auto px-4 text-center text-white text-3xl">
@@ -89,6 +89,15 @@ const Nominations = () => {
             </div>
         )
 
+    if (status === 'loading')
+        return (
+            <div className="bg-sportsBlue min-h-screen flex flex-col justify-center items-center pt-[200px] pb-[50px] md:pt-[125px] md:pb-125px]">
+                <div className="container mx-auto px-4 text-center text-white text-3xl">
+                    Loading...
+                </div>
+            </div>
+        )
+        
     if (user?.status === "accepted") {
         router.push('/my-team')
     }
@@ -135,10 +144,12 @@ const Nominations = () => {
                             key="applicationNotFound"
                             className="container mx-auto px-4 text-center text-white text-3xl"
                         >
-                            <p className="mb-8">No nominations found! Apply and start your own team!</p>
-                            <Link href="/">
-                                <a className="border border-sportsGray inline-block py-3 px-4 md:mr-8">Apply Now!</a>
-                            </Link>
+                            <div className="bg-sportsBlue shadow-[0_0_10px_0_rgba(0,0,0,0.8)] w-full max-w-5xl mx-auto rounded-[4rem] text-center text-white px-4 py-8">
+                                <p className="mb-8">No nominations found! Apply and start your own team!</p>
+                                <Link href="/">
+                                    <a className="inline-block mx-auto mb-4 md:mb-0 md:mx-0 md:mr-16 uppercase rounded-2xl py-4 px-5 bg-green-600 text-2xl font-semibold shadow-black shadow-md">Apply Now!</a>
+                                </Link>
+                            </div>
                         </motion.div>
                     )
                 }
@@ -153,8 +164,10 @@ const Nominations = () => {
                             key="applicationNominated"
                             className="container mx-auto px-4 text-center text-white text-3xl"
                         >
-                            <h2 className="text-xl mb-8">Your nomination is still being reviewed by the team!</h2>
-                            <h3 className="text-2xl">Check Back Soon!</h3>
+                            <div className="bg-sportsBlue shadow-[0_0_10px_0_rgba(0,0,0,0.8)] w-full max-w-5xl mx-auto rounded-[4rem] text-center text-white px-4 py-8">
+                                <h2 className="text-xl mb-8">Your nomination is still being reviewed by the team!</h2>
+                                <h3 className="text-2xl">Check Back Soon!</h3>
+                            </div>
                         </motion.div>
                     )
                 }

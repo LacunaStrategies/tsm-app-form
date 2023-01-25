@@ -14,11 +14,14 @@ export default async function handler(req, res) {
     switch (method) {
         case 'POST':
 
+        console.log(token)
+
             const updatedUser = await db.collection('members').updateOne(
                 { twitterHandle: token.userProfile.twitterHandle },
                 {
                     $set: {
-                        status: 'accepted'
+                        status: 'accepted',
+                        profilePic: token.picture,
                     }
                 }
             )
