@@ -33,7 +33,7 @@ const questionOneOptions = [
     },
 ]
 
-const Form = ({ address, session, setPhase, setValues, values }) => {
+const Form = ({ address, session, setPhase, setStatus, setValues, values }) => {
 
     // States
     const [canProgress, setCanProgress] = useState(false)
@@ -91,7 +91,7 @@ const Form = ({ address, session, setPhase, setValues, values }) => {
 
                 return
             }
-
+            setStatus('Pending')
             setPhase(3)
             setSubmitting(false)
 
@@ -134,7 +134,7 @@ const Form = ({ address, session, setPhase, setValues, values }) => {
                                         onChange={(e) => setValues({ ...values, q0: e.target.value })}
                                         value={values.q0}
                                         placeholder="Discord ID"
-                                        maxlength={500}
+                                        maxLength={500}
                                     />
                                 </div>
                             </motion.div>
@@ -191,7 +191,7 @@ const Form = ({ address, session, setPhase, setValues, values }) => {
                                         onChange={(e) => setValues({ ...values, q2: e.target.value })}
                                         value={values.q2}
                                         placeholder="Answer here..."
-                                        maxlength={500}
+                                        maxLength={500}
                                     ></textarea>
                                 </div>
                             </motion.div>
@@ -214,7 +214,7 @@ const Form = ({ address, session, setPhase, setValues, values }) => {
                                         onChange={(e) => setValues({ ...values, q3: e.target.value })}
                                         value={values.q3}
                                         placeholder="Answer here..."
-                                        maxlength={500}
+                                        maxLength={500}
                                     ></textarea>
                                 </div>
                             </motion.div>
@@ -237,7 +237,7 @@ const Form = ({ address, session, setPhase, setValues, values }) => {
                                         onChange={(e) => setValues({ ...values, q4: e.target.value })}
                                         value={values.q4}
                                         placeholder="Answer here..."
-                                        maxlength={500}
+                                        maxLength={500}
                                     ></textarea>
                                 </div>
                             </motion.div>
@@ -260,7 +260,7 @@ const Form = ({ address, session, setPhase, setValues, values }) => {
                                         onChange={(e) => setValues({ ...values, q5: e.target.value })}
                                         value={values.q5}
                                         placeholder="Answer here..."
-                                        maxlength={500}
+                                        maxLength={500}
                                     ></textarea>
                                 </div>
                             </motion.div>
@@ -283,7 +283,7 @@ const Form = ({ address, session, setPhase, setValues, values }) => {
                                         onChange={(e) => setValues({ ...values, q6: e.target.value })}
                                         value={values.q6}
                                         placeholder="Answer here..."
-                                        maxlength={500}
+                                        maxLength={500}
                                     ></textarea>
                                 </div>
                             </motion.div>
@@ -306,7 +306,7 @@ const Form = ({ address, session, setPhase, setValues, values }) => {
                                         onChange={(e) => setValues({ ...values, q7: e.target.value })}
                                         value={values.q7}
                                         placeholder="https://www.example.com, https://www.example2.com, etc."
-                                        maxlength={500}
+                                        maxLength={500}
                                     ></textarea>
                                 </div>
                             </motion.div>

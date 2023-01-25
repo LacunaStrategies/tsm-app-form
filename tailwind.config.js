@@ -10,8 +10,12 @@ module.exports = {
         sportsBlue: '#0f3d68',
         sportsTan: '#f6f3ea',
         sportsGray: '#d5d5d5',
+      },
+      fontFamily: {
+        lulo: ['LULO Clean', 'sans-serif']
       }
     },
   },
+  
   plugins: [],
 }

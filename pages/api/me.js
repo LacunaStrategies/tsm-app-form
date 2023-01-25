@@ -1,9 +1,12 @@
 import clientPromise from '/lib/mongodb'
 import { getToken } from 'next-auth/jwt'
 
-export default async function getApplications(req, res) {
+export default async function me(req, res) {
     const { method } = req
+
     const token = await getToken({ req })
+    if (!token)
+        return res.status(401).json({ message: 'Please Connect Your Twitter!' })
 
     const client = await clientPromise
     const db = client.db('sports')
@@ -11,12 +14,8 @@ export default async function getApplications(req, res) {
     switch (method) {
         case 'GET':
 
-            const application = await db.collection('applications').findOne({ twitter: token.userProfile.twitterHandle })
-
-            let phase = application ? 3 : 2
-            let status = application?.status || null
-
-            res.status(200).json({ phase, status })
+            const user = await db.collection('members').findOne({ twitterHandle: token.userProfile.twitterHandle })
+            res.status(200).json({ user })
 
             break;
 

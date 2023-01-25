@@ -4,8 +4,8 @@ import TwitterLegacy from 'next-auth/providers/twitter'
 export const authOptions = {
     providers: [
         TwitterLegacy({
-            clientId: process.env.TWITTER_CLIENT_KEY,
-            clientSecret: process.env.TWITTER_CLIENT_SECRET,
+            clientId: process.env.STAGE_TWITTER_CLIENT_KEY,
+            clientSecret: process.env.STAGE_TWITTER_CLIENT_SECRET,
             version: "2.0",
         })
     ],
