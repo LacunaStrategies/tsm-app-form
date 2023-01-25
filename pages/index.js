@@ -31,7 +31,7 @@ export default function Home() {
   const router = useRouter()
 
   // Hooks
-  const { data: session } = useSession()
+  const { data: session, status: sessionStatus } = useSession()
   const { address, isConnected } = useAccount()
 
   // States
@@ -48,6 +48,7 @@ export default function Home() {
     q7: '',
   })
   const [isMounted, setIsMounted] = useState(false)
+
   const [phase, setPhase] = useState(0)
   const [status, setStatus] = useState('Pending')
 
@@ -56,36 +57,44 @@ export default function Home() {
     setIsMounted(true)
   }, [])
 
+  useEffect(() => {
+    console.log('Index => ', status)
+
+    // If application status is approved, redirect
+    if (status === "Approved")
+      router.push('/my-team')
+
+  }, [status, router])
+
   // Monitor initial phases by isConnected and session
   useEffect(() => {
 
     // If wallet and twitter are connected
-    if (isConnected && session) {
+    if (isConnected && sessionStatus === "authenticated") {
 
-      // Check for existing application and set phase to Form or Congratulations accordingly
+      // Check for existing application and set form phase and application status
       const checkApplication = async () => {
-        const resp = await axios.get(`/api/getSessionApplication?twitterHandle=${session.twitter.twitterHandle}`)
-
-        console.log(resp)
+        // Query database for applications associated with session twitterHandle
+        const resp = await axios.get('/api/getSessionApplication')
+        
+        // Set Status from response data [pending, approved, rejected, null]
         setStatus(resp.data.status)
+
+        // Set phase from response data [2, 3]
         setPhase(resp.data.phase)
       }
       checkApplication()
 
-      // If application status is approved, redirect
-      if (phase === "Approved")
-        router.push('/my-team')
-
-    // If only wallet is connected, set phase to Twitter Connect
+      // If only wallet is connected, set phase to Twitter Connect
     } else if (isConnected) {
       setPhase(1)
 
-    // Set phase to Wallet Connect 
+      // Set phase to Wallet Connect 
     } else {
       setPhase(0)
     }
 
-  }, [isConnected, session])
+  }, [isConnected, sessionStatus])
 
   if (!isMounted)
     return
@@ -156,6 +165,7 @@ export default function Home() {
               address={address}
               session={session}
               setPhase={setPhase}
+              setStatus={setStatus}
               setValues={setValues}
               values={values}
             />
@@ -172,7 +182,7 @@ export default function Home() {
             exit={{ opacity: 0 }}
             key="phase4"
           >
-            <Confirmation 
+            <Confirmation
               status={status}
             />
           </motion.div>

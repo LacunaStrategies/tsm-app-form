@@ -24,7 +24,7 @@ function Page() {
             const resp = await axios.put(`/api/approveApplication?applicationId=${applicationId}`)
             alert('Success! Page will need refresh to see changes.')
         } catch (err) {
-            alert('An unexpected error occurred!')
+            alert(err.response?.data.message || err.message)
             console.error(err)
         }
     }
@@ -34,7 +34,7 @@ function Page() {
             const resp = await axios.put(`/api/rejectApplication?applicationId=${applicationId}`)
             alert('Success! Page will need refresh to see changes.')
         } catch (err) {
-            alert('An unexpected error occurred!')
+            alert(err.response?.data.message || err.message)
             console.error(err)
         }
     }

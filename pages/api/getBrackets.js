@@ -19,7 +19,6 @@ export default async function getApplications(req, res) {
                         }
                 }
             ]).toArray()
-            console.log(brackets)
 
             res.status(200).json({ brackets })
 

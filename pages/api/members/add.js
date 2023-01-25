@@ -9,8 +9,10 @@ export default async function getApplications(req, res) {
     switch (method) {
         case 'POST':
 
+            const twitterHandle = body.twitterHandle.replace('@','')
+
             try {
-                const exists = await db.collection('members').findOne({ twitterHandle: body.twitterHandle })
+                const exists = await db.collection('members').findOne({ twitterHandle })
                 if (exists)
                     return res.status(400).json({ message: 'User Already Exists!' })
 
@@ -66,8 +68,8 @@ export default async function getApplications(req, res) {
 
                 const insert = await db.collection('members').insertOne({
                     role: body.role,
-                    twitterHandle: body.twitterHandle.toLowerCase(),
-                    nominatedBy: body.nominatedBy,
+                    twitterHandle,
+                    nominatedBy: body.nominatedBy.replace('@',''),
                     status: 'pending',
                     teamId: team._id
                 })

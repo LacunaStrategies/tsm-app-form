@@ -9,8 +9,10 @@ export default async function getApplications(req, res) {
     switch (method) {
         case 'POST':
 
+            const twitterHandle = body.twitterHandle.replace('@','')
+
             try {
-                const exists = await db.collection('members').findOne({ twitterHandle: body.twitterHandle.toLowerCase() })
+                const exists = await db.collection('members').findOne({ twitterHandle })
                 if (!exists)
                     return res.status(400).json({ message: 'User Not Found!' })
 
@@ -30,7 +32,7 @@ export default async function getApplications(req, res) {
                     let members = 0
 
                     teamMembers.forEach(function (v, i) {
-                        if (v.twitterHandle === body.twitterHandle.toLowerCase())
+                        if (v.twitterHandle === twitterHandle)
                             return
 
                         if (v.role === 'Elite Scout')
@@ -62,13 +64,13 @@ export default async function getApplications(req, res) {
                 }
 
                 const updatedUser = await db.collection('members').updateOne(
-                    { twitterHandle: body.twitterHandle },
+                    { twitterHandle },
                     {
                         $set:
                             {
                                 role: body.role,
-                                twitterHandle: body.twitterHandle,
-                                nominatedBy: body.nominatedBy,
+                                twitterHandle,
+                                nominatedBy: body.nominatedBy.replace('@',''),
                                 status: body.status,
                                 teamId: team._id
                             }
