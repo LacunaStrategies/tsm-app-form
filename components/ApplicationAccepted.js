@@ -3,8 +3,8 @@ import { motion } from 'framer-motion'
 const ApplicationAccepted = ({ heading, subHeading, content }) => {
     return (
         <motion.aside
-            initial={{ scale: 1, opacity: 1 }}
-            animate={{ scale: 0.5, y:-150, opacity: 0.8 }}
+            initial={{ scale: 1 }}
+            animate={{ scale: 0.7 }}
             transition={{ delay: 4, duration: 2 }}
             className="text-white text-center"
         >

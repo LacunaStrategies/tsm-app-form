@@ -13,9 +13,9 @@ const Brackets = ({ bracketData, walkthrough, setWalkthrough, teamMembers, open 
 
     return (
         <motion.main 
-            initial={{ opacity: 0, scale: 0.7, y: 0 }}
-            animate={{ opacity: 1, scale: 1, y: '-120px' }}
-            transition={{ delay: 2, duration: 2 }}
+            initial={{ opacity: 0, scale: 0.7, y: 120 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ delay: 4, duration: 2 }}
             className="text-white mt-12">
             <div className="max-w-7xl mx-auto border-2 border-white rounded-3xl px-8 pt-4 pb-8 lg:py-20 flex flex-col justify-center">
                 <div className="lg:flex lg:items-center lg:justify-center lg:mx-auto">
