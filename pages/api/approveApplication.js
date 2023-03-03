@@ -76,6 +76,7 @@ export default async function handler(req, res) {
                 status: `Congratulations, @${application.twitter}! Your application has been accepted and your are now an Elite Scout! Head over to our website to start building your team!` 
             }
             
+            console.log('Pre-Error')
             try {
                 const resp = await t.post('statuses/update', parameters)
                 console.log(resp)

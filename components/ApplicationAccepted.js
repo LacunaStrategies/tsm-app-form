@@ -1,12 +1,11 @@
 import { motion } from 'framer-motion'
 
 const ApplicationAccepted = ({ heading, subHeading, content }) => {
-
     return (
         <motion.aside
             initial={{ scale: 1, opacity: 1 }}
-            animate={{ scale: 0.5, opacity: 0 }}
-            transition={{ delay: 2, duration: 2 }}
+            animate={{ scale: 0.5, y:-150, opacity: 0.8 }}
+            transition={{ delay: 4, duration: 2 }}
             className="text-white text-center"
         >
             <motion.h2

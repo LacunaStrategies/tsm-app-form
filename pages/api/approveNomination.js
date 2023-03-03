@@ -40,6 +40,8 @@ export default async function handler(req, res) {
                 access_token_secret: process.env.LSDEVLABSBOT_TWITTER_ACCESS_TOKEN_SECRET
             })
 
+            // Connect to Twiiter and retrieve Nominee Profile Pic
+            
             const parameters = { 
                 status: `Congratulations, @${nomination.twitterHandle}! You have been nominated by ${nomination.role === 'Member' ? 'Senior Scout' : 'Elite Scout'} @${nomination.nominatedBy} to be a ${nomination.role} on their team! Head on over to our website to accept your nomination${nomination.role === "Senior Scout" ? ' and start building your team' : ''}!` 
             }
