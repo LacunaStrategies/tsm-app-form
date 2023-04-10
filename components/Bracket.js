@@ -4,14 +4,17 @@ const Bracket = ({ type, twitterHandle, imgSrc, isUser, canNominate, walkthrough
             {/* Walkthrough Overlay - Step 1 */}
             {
                 isUser && walkthrough === 1 && (
-                    <div className="absolute z-30 text-4xl -top-full -left-8 uppercase font-bold w-full">This is You! <button onClick={() => setWalkthrough(2)}>NEXT</button></div>
+                    <div className="absolute z-30 text-4xl -top-[120%] -left-8 uppercase">
+                        This is <span className="font-bold">You</span>!
+                        <button className="absolute top-full -right-8 text-2xl" onClick={() => setWalkthrough(2)}>NEXT &rarr;</button>
+                    </div>
                 )
             }
 
             {/* Walkthrough Overlay - Step 2 */}
             {
                 canNominate && walkthrough === 2 && (
-                    <div className="absolute z-30 text-4xl -top-full -left-8 uppercase font-bold w-full">Click to Nominate!</div>
+                    <div className="absolute z-30 text-3xl -top-full left-2 uppercase font-bold w-full">Click to Nominate!</div>
                 )
             }
 

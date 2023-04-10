@@ -7,6 +7,10 @@ import { getToken } from 'next-auth/jwt'
 // ** Twitter Import
 import Twitter from 'twitter-lite'
 
+// ** SendGrid Import
+import sendgrid from '@sendgrid/mail'
+sendgrid.setApiKey(process.env.SENDGRID_API_KEY)
+
 export default async function handler(req, res) {
 
     // Request Variables
@@ -29,6 +33,8 @@ export default async function handler(req, res) {
 
     switch (method) {
         case 'POST':
+
+            const errors = []
 
             // Verify Input Data (Type)
             if (type !== "Member" && type !== "Senior Scout")
@@ -108,7 +114,6 @@ export default async function handler(req, res) {
             }
 
             // Insert nominations
-            let insert
             let insertData
 
             if (type === "Senior Scout") {
@@ -128,7 +133,7 @@ export default async function handler(req, res) {
                         teamId: team._id,
                     },
                 ]
-                insert = await db.collection('members').insertMany(insertData)
+                await db.collection('members').insertMany(insertData)
             } else if (type === "Member") {
                 insertData = [
                     {
@@ -139,7 +144,7 @@ export default async function handler(req, res) {
                         teamId: team._id,
                     }
                 ]
-                insert = await db.collection('members').insertOne(insertData[0])
+                await db.collection('members').insertOne(insertData[0])
             }
 
             // Trigger Twitter notification to Admins
@@ -171,11 +176,46 @@ export default async function handler(req, res) {
                 console.log(resp)
             } catch (err) {
                 console.log(err)
+                errors.push(err)
             }
 
-            res.status(200).json({ insertData })
+            try {
+                await sendgrid.send({
+                    to: 'lacunadevlabs@gmail.com',
+                    from: 'info@lacuna-strategies.com',
+                    subject: `[Nomination Received from The Sports Metaverse]: @${token.userProfile.twitterHandle}`,
+                    html: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+                            <html lang="en">
+                            <head>
+                                <meta charset="utf-8">
+                                <title>Nomination Received Notification</title>
+                                <meta name="description" content="Nomination Received Notification">
+                                <meta name="author" content="Lacuna Strategies">
+                                <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
+                            </head>
+                            
+                            <body>
+                                <div class="container" style="margin-left: 20px;margin-right: 20px;">
+                                <h3>You've received a new Nomination from @${token.userProfile.twitterHandle}</h3>
+                                <div style="font-size: 16px;">
+                                    <p><strong>Nomination Type:</strong> ${type}</p>
+                                    ${seniorScout1 !== '' ? `<p><strong>Senior Scout Nominee:</strong> @${seniorScout1}</p>` : ''}
+                                    ${seniorScout2 !== '' ? `<p><strong>Senior Scout Nominee:</strong> @${seniorScout2}</p>` : ''}
+                                    ${member !== '' ? `<p><strong>Member Nominee:</strong> @${member}</p><br />` : ''}
+                                    <p>Log in to the Admin section of your website and approve or deny the nomination!</p>
+                                </div>
+                                </div>
+                            </body>
+                            </html>`,
+                })
+            } catch (err) {
+                console.log(err)
+                errors.push(err)
+            }
 
-            break;
+            res.status(errors.length > 0 ? 207 : 200).json({ success: true, insertData, errorCount: errors.length, errors })
+
+            break
 
         default:
             res.setHeader('Allow', ['POST'])

@@ -13,7 +13,7 @@ export default async function handler(req, res) {
 
     switch (method) {
         case 'POST':
-
+            console.log('Updating user')
             const updatedUser = await db.collection('members').deleteOne({ twitterHandle: token.userProfile.twitterHandle })
 
             if (!updatedUser.deletedCount)

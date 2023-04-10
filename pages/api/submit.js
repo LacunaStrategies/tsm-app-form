@@ -2,10 +2,15 @@
 import clientPromise from '/lib/mongodb'
 
 // ** NextAuth Imports
-import { unstable_getServerSession } from "next-auth/next"
+import { getServerSession } from "next-auth/next"
 import { authOptions } from "./auth/[...nextauth]"
 
+// ** Twitter Lite Import
 import Twitter from 'twitter-lite'
+
+// ** Sendgrid Mail Import
+import sendgrid from '@sendgrid/mail'
+sendgrid.setApiKey(process.env.SENDGRID_API_KEY)
 
 export default async function submit(req, res) {
   const { method } = req
@@ -16,13 +21,15 @@ export default async function submit(req, res) {
   switch (method) {
     case 'POST':
 
+      const errors = []
+
       // Verify active sesion before proceeding
-      const session = await unstable_getServerSession(req, res, authOptions)
+      const session = await getServerSession(req, res, authOptions)
       if (!session)
         return res.status(401).json({ message: 'Twitter connection is required to authenticate your application!' })
 
       // Variables
-      const body = req.body;
+      const body = req.body
       const requiredFields = ['wallet', 'twitter', 'q0,', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6']
 
       let failedValidation = false
@@ -47,8 +54,8 @@ export default async function submit(req, res) {
         return res.status(400).json({ message: `Application already exists for ${body.twitter}` })
 
       // Subit new application
-      const newApplication = await db.collection('applications').insertOne({ ...body, status: 'Pending', profilePic: session.user.image })
-      
+      await db.collection('applications').insertOne({ ...body, status: 'Pending', profilePic: session.user.image })
+
       // Trigger Twitter notification to Admins
       const t = new Twitter({
         consumer_key: process.env.LSDEVLABSAPP_TWITTER_API_KEY,
@@ -76,10 +83,43 @@ export default async function submit(req, res) {
         console.log(resp)
       } catch (err) {
         console.log(err)
+        errors.push(err)
       }
 
-      res.status(200).json({ ok: true })
-      break;
+      // Trigger Email Notification
+      try {
+        await sendgrid.send({
+          to: 'lacunadevlabs@gmail.com',
+          from: 'info@lacuna-strategies.com',
+          subject: `[Application Received from The Sports Metaverse]: @${body.twitter}`,
+          html: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+          <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <title>Application Received Notification</title>
+            <meta name="description" content="Application Received Notification">
+            <meta name="author" content="Lacuna Strategies">
+            <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
+          </head>
+          
+          <body>
+            <div class="container" style="margin-left: 20px;margin-right: 20px;">
+              <h3>You've received a new Application from @${body.twitter}</h3>
+              <div style="font-size: 16px;">
+                <p>Log in to the Admin section of your website and approve or deny the application!</p>
+              </div>
+            </div>
+          </body>
+          </html>`,
+        })
+      } catch (err) {
+        console.log(err)
+        errors.push(err)
+      }
+
+      res.status(errors.length > 0 ? 207 : 200).json({ success: true, errors, errorCount: errors.length })
+
+      break
 
     default:
       res.setHeader('Allow', ['POST'])

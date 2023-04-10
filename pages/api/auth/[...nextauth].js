@@ -10,12 +10,7 @@ export const authOptions = {
         })
     ],
     callbacks: {
-        async jwt({ token, user, account, profile, isNewUser }) {
-            // console.log('User:', user)
-            // console.log('Account:', account)
-            // console.log('Profile:', profile)
-            // console.log('isNewuser:', isNewUser)
-            // console.log('Token:', token)
+        async jwt({ token, account, profile}) {
             if (profile) {
                 token['userProfile'] = {
                     twitterHandle: profile.data.username
@@ -28,10 +23,7 @@ export const authOptions = {
             }
             return token
         },
-        async session({ session, user, token }) {
-            // console.log('User:', user)
-            // console.log('Token:', token)
-            // console.log('Session:', session)
+        async session({ session, token }) {
             session['twitter'] = {
                 twitterHandle: token.userProfile.twitterHandle
             }

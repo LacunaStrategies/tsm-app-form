@@ -57,6 +57,11 @@ const Modal = ({ handleClose, type, teamMembers, setTeamMembers }) => {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
+        if (typeof window !== 'undefined') {
+            console.log('Set LS Variable')
+            localStorage.setItem('tsm-wt', 'true')
+        }
+
         setFormLoading(true)
 
         try {

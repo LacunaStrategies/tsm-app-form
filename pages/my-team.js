@@ -32,7 +32,6 @@ export default function MyTeam() {
     const [bracketData, setBracketData] = useState([])
     const [teamMembers, setTeamMembers] = useState([])
     const [walkthrough, setWalkthrough] = useState(0)
-    const [walkthroughCompleted, setWalkthroughCompleted] = useState(false)
     const [modalOpen, setModalOpen] = useState(false)
     const [formType, setFormType] = useState('')
     const [validUser, setValidUser] = useState(false)
@@ -47,8 +46,23 @@ export default function MyTeam() {
     }
 
     const close = () => {
+        
+        if (typeof window !== 'undefined') {
+            console.log('Set LS Variable')
+            localStorage.setItem('tsm-wt', 'true')
+        }
+
+        setWalkthrough(0)        
         setModalOpen(false)
         setFormType('')
+    }
+
+    const skipWalkthrough = () => {
+        setWalkthrough(0)
+        if (typeof window !== 'undefined') {
+            console.log('Set LS Variable')
+            localStorage.setItem('tsm-wt', 'true')
+        }
     }
 
     useEffect(() => {
@@ -111,6 +125,7 @@ export default function MyTeam() {
                     teamMembers={teamMembers}
                     walkthrough={walkthrough}
                     setWalkthrough={setWalkthrough}
+                    skipWalkthrough={skipWalkthrough}
                     open={open}
                 />
             </div>

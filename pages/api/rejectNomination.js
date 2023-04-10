@@ -3,6 +3,7 @@ import clientPromise from '/lib/mongodb'
 import { ObjectId } from "mongodb"
 
 export default async function handler(req, res) {
+    console.log('Received request')
     const { method } = req
     const { nominationId } = req.query
 
@@ -11,7 +12,7 @@ export default async function handler(req, res) {
 
     switch (method) {
         case 'PUT':
-
+            
             const rejectedNomination = await db.collection('members').deleteOne({ _id: ObjectId(nominationId) })
 
             if (!rejectedNomination.deletedCount)

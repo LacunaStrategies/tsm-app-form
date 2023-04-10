@@ -3,7 +3,7 @@ import clientPromise from '/lib/mongodb'
 import { ObjectId } from "mongodb"
 
 // ** NextAuth Imports
-import { unstable_getServerSession } from "next-auth/next"
+import { getServerSession } from "next-auth/next"
 import { authOptions } from "./auth/[...nextauth]"
 
 // ** Twitter Import
@@ -20,7 +20,7 @@ export default async function handler(req, res) {
         case 'PUT':
 
             // Verify active sesion before proceeding
-            const session = await unstable_getServerSession(req, res, authOptions)
+            const session = await getServerSession(req, res, authOptions)
 
             // Get application data
             const application = await db.collection('applications').findOne({ _id: ObjectId(applicationId) })
@@ -73,19 +73,16 @@ export default async function handler(req, res) {
             })
 
             const parameters = { 
-                status: `Congratulations, @${application.twitter}! Your application has been accepted and your are now an Elite Scout! Head over to our website to start building your team!` 
+                status: `Congratulations, @${application.twitter}! Your application has been accepted and you are now an Elite Scout! Head over to our website to start building your team!` 
             }
             
-            console.log('Pre-Error')
             try {
                 const resp = await t.post('statuses/update', parameters)
                 console.log(resp)
             } catch (err) {
                 console.log(err)
-                return res.status(500).json({ message: 'An error occurred while posting Twitter status update!' })
             }
             
-                
             res.status(200).json({ ok: true })
             break;
 

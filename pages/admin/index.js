@@ -5,18 +5,18 @@ const AdminPage = () => {
         <div className="container px-4 py-8 mx-auto">
             <h1>Admin Pages</h1>
 
-            <ul>
+            <ul className="list-disc pl-10 mt-4">
                 <li>
-                    <Link href="/applications">Review Applications</Link>
+                    <Link href="/admin/applications"><a className="transition-all duration-300 underline text-blue-500 hover:text-blue-900">Review Applications</a></Link>
                 </li>
                 <li>
-                    <Link href="/applications">Review Nominations</Link>
+                    <Link href="/admin/nominations"><a className="transition-all duration-300 underline text-blue-500 hover:text-blue-900">Review Nominations</a></Link>
                 </li>
                 <li>
-                    <Link href="/manage-brackets">Manage Teams &amp; Users</Link>
+                    <Link href="/admin/manage-brackets"><a className="transition-all duration-300 underline text-blue-500 hover:text-blue-900">Manage Teams &amp; Users</a></Link>
                 </li>
                 <li>
-                    <Link href="#">Manage Twitter Notifications</Link>
+                    <Link href="/admin/twitterNotifications"><a className="transition-all duration-300 underline text-blue-500 hover:text-blue-900">Manage Twitter Notifications</a></Link>
                 </li>
             </ul>
         </div>

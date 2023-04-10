@@ -1,6 +1,8 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 
+import Link from 'next/link'
+
 function Page() {
 
     const [applications, setApplications] = useState([])
@@ -52,6 +54,10 @@ function Page() {
 
     return (
         <div className="container px-4 py-8 mx-auto">
+            <div>
+                <Link href="/admin"><a className="inline-block transition-all duration-300 mb-8 py-2 px-5 bg-blue-500 text-white hover:bg-blue-900">Back to Admin</a></Link>
+            </div>
+
             <div className="mb-8">
                 <input className="w-full py-3 px-2 border border-sportsGray" type="text" name="search" onChange={(e) => setSearch(e.target.value)} value={search} placeholder="Search..." />
             </div>
