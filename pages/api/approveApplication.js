@@ -110,36 +110,37 @@ export default async function handler(req, res) {
     const canvas = createCanvas(width, height)
     const context = canvas.getContext('2d')
 
-    // // Load background image
-    // try {
-    //     // Load image from assets and draw to canvas context as layer
-    //     const bgImageFile = path.join(process.cwd(), 'images', 'elite-bg-1200x675.jpg')
-    //     // const bgImage = await loadImage('public/assets/images/elite-bg-1200x675.jpg')
-    //     const bgImage = await loadImage(bgImageFile)
-    //     context.drawImage(bgImage, 0, 0, width, height)
-    // } catch (error) {
-    //     // If we encounter an error, log the error and apply a flat color background as fallback
-    //     console.log('Error Loading Bg Image => ', error)
-    //     context.fillStyle = '#000'
-    //     context.fillRect(0, 0, width, height)
-    // }
+    // Load background image
+    try {
+        // Load image from assets and draw to canvas context as layer
+        const bgImageFile = path.join(process.cwd(), 'images', 'elite-bg-1200x675.jpg')
+        // const bgImage = await loadImage('public/assets/images/elite-bg-1200x675.jpg')
+        const bgImage = await loadImage(bgImageFile)
+        context.drawImage(bgImage, 0, 0, width, height)
+    } catch (error) {
+        // If we encounter an error, log the error and apply a flat color background as fallback
+        console.log('Error Loading Bg Image => ', error)
+        context.fillStyle = '#000'
+        context.fillRect(0, 0, width, height)
+    }
 
-    // context.save()
-    // // Load profile image
-    // try {
-    //     // Load image from assets and draw to canvas context as layer
-    //     const profileImg = await loadImage(application.profilePic)
-    //     context.arc(244, 335, 153, 0, Math.PI * 2, false)
-    //     context.lineWidth = 16
-    //     context.strokeStyle = '#ffca13'
-    //     context.stroke()
-    //     context.clip()
-    //     context.drawImage(profileImg, 91, 182, 306, 306)
-    //     context.restore()
-    // } catch (error) {
-    //     // If we encounter an error, log the error and apply a flat color background as fallback
-    //     console.log('Error Loading Bg Image => ', error)
-    // }
+    context.save()
+
+    // Load profile image
+    try {
+        // Load image from assets and draw to canvas context as layer
+        const profileImg = await loadImage(application.profilePic)
+        context.arc(244, 335, 153, 0, Math.PI * 2, false)
+        context.lineWidth = 16
+        context.strokeStyle = '#ffca13'
+        context.stroke()
+        context.clip()
+        context.drawImage(profileImg, 91, 182, 306, 306)
+        context.restore()
+    } catch (error) {
+        // If we encounter an error, log the error and apply a flat color background as fallback
+        console.log('Error Loading Bg Image => ', error)
+    }
 
     // Set image text placeholders values
     let text = ''
