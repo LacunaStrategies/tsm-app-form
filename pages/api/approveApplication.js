@@ -102,13 +102,13 @@ export default async function handler(req, res) {
     // const fontFile = path.join(process.cwd(), 'fonts', 'Roboto-Bold.ttf')
     // registerFont(fontFile, { family: 'Roboto' })
 
-    // // Canvas Size
-    // const width = 1200
-    // const height = 675
+    // Canvas Size
+    const width = 1200
+    const height = 675
 
-    // // Initiate canvas
-    // const canvas = createCanvas(width, height)
-    // const context = canvas.getContext('2d')
+    // Initiate canvas
+    const canvas = createCanvas(width, height)
+    const context = canvas.getContext('2d')
 
     // // Load background image
     // try {
@@ -141,90 +141,90 @@ export default async function handler(req, res) {
     //     console.log('Error Loading Bg Image => ', error)
     // }
 
-    // // Set image text placeholders values
-    // let text = ''
+    // Set image text placeholders values
+    let text = ''
 
-    // // Set text to Twitter handle
-    // text = `@${application.twitter}`
+    // Set text to Twitter handle
+    text = `@${application.twitter}`
 
-    // // Set base text/font styles
-    // context.textAlign = 'right'
-    // context.font = '62px "Roboto"'
+    // Set base text/font styles
+    context.textAlign = 'right'
+    context.font = '62px "Roboto"'
 
-    // // Fill bottom drop shadow
-    // context.fillStyle = 'rgba(0,0,0,0.3)'
-    // context.fillText(text, width - 63, 333)
+    // Fill bottom drop shadow
+    context.fillStyle = 'rgba(0,0,0,0.3)'
+    context.fillText(text, width - 63, 333)
 
-    // // Fill top drop shadow
-    // context.fillStyle = 'rgba(0,0,0,0.7)'
-    // context.fillText(text, width - 67, 326)
+    // Fill top drop shadow
+    context.fillStyle = 'rgba(0,0,0,0.7)'
+    context.fillText(text, width - 67, 326)
 
-    // // Fill text
-    // context.fillStyle = '#fec920'
-    // context.fillText(text, width - 71, 319)
+    // Fill text
+    context.fillStyle = '#fec920'
+    context.fillText(text, width - 71, 319)
 
-    // // Set text to welcome message part 3
-    // text = 'Scout'
+    // Set text to welcome message part 3
+    text = 'Scout'
 
-    // context.fillStyle = 'rgba(0,0,0,0.3)'
-    // context.fillText(text, width - 63, 421)
+    context.fillStyle = 'rgba(0,0,0,0.3)'
+    context.fillText(text, width - 63, 421)
 
-    // context.fillStyle = 'rgba(0,0,0,0.7)'
-    // context.fillText(text, width - 67, 414)
+    context.fillStyle = 'rgba(0,0,0,0.7)'
+    context.fillText(text, width - 67, 414)
 
-    // context.fillStyle = '#fff'
-    // context.fillText(text, width - 71, 407)
+    context.fillStyle = '#fff'
+    context.fillText(text, width - 71, 407)
 
-    // // Set text to welcome message part 2
-    // text = 'Elite'
+    // Set text to welcome message part 2
+    text = 'Elite'
 
-    // context.fillStyle = 'rgba(0,0,0,0.3)'
-    // context.fillText(text, width - 257, 421)
+    context.fillStyle = 'rgba(0,0,0,0.3)'
+    context.fillText(text, width - 257, 421)
 
-    // context.fillStyle = 'rgba(0,0,0,0.7)'
-    // context.fillText(text, width - 261, 414)
+    context.fillStyle = 'rgba(0,0,0,0.7)'
+    context.fillText(text, width - 261, 414)
 
-    // context.fillStyle = '#fec920'
-    // context.fillText(text, width - 265, 407)
+    context.fillStyle = '#fec920'
+    context.fillText(text, width - 265, 407)
 
-    // // Set text to welcome message part 2
-    // text = 'Welcome'
+    // Set text to welcome message part 2
+    text = 'Welcome'
 
-    // context.fillStyle = 'rgba(0,0,0,0.3)'
-    // context.fillText(text, width - 416, 421)
+    context.fillStyle = 'rgba(0,0,0,0.3)'
+    context.fillText(text, width - 416, 421)
 
-    // context.fillStyle = 'rgba(0,0,0,0.7)'
-    // context.fillText(text, width - 420, 414)
+    context.fillStyle = 'rgba(0,0,0,0.7)'
+    context.fillText(text, width - 420, 414)
 
-    // context.fillStyle = '#fff'
-    // context.fillText(text, width - 424, 407)
+    context.fillStyle = '#fff'
+    context.fillText(text, width - 424, 407)
 
-    // const dataUrl = canvas.toDataURL()
-    // const base64 = dataUrl.split(',')[1]
+    const dataUrl = canvas.toDataURL()
+    const base64 = dataUrl.split(',')[1]
 
-    // let mediaIdString = ''
-    // try {
-    //     const { media_id_string } = await uploadClient.post('media/upload', {
-    //         media_data: base64,
-    //         media_category: 'TWEET_IMAGE',
-    //     })
-    //     mediaIdString = media_id_string
-    // } catch (error) {
-    //     console.log('Media Upload to Twitter Failed => ', error)
-    // }
+    let mediaIdString = ''
+    try {
+        const { media_id_string } = await uploadClient.post('media/upload', {
+            media_data: base64,
+            media_category: 'TWEET_IMAGE',
+        })
+        mediaIdString = media_id_string
+    } catch (error) {
+        console.log('Media Upload to Twitter Failed => ', error)
+    }
 
-    // // Create Twitter Message
-    // const parameters = {
-    //     media_ids: mediaIdString,
-    //     status: `Congratulations, @${application.twitter}! Your application has been accepted and you are now an Elite Scout! Head over to our website to start building your team!`
-    // }
+    // Create Twitter Message
+    const parameters = {
+        media_ids: mediaIdString,
+        status: `Congratulations, @${application.twitter}! Your application has been accepted and you are now an Elite Scout! Head over to our website to start building your team!`
+    }
 
-    // try {
-    //     await twitterClient.post('statuses/update', parameters)
-    // } catch (error) {
-    //     console.log('Error Posting Tweet! => ', error)
-    //     return res.status(500).json({ success: false, error })
-    // }
+    try {
+        await twitterClient.post('statuses/update', parameters)
+    } catch (error) {
+        console.log('Error Posting Tweet! => ', error)
+        return res.status(500).json({ success: false, error })
+    }
 
     res.status(200).json({ success: true })
 
