@@ -26,7 +26,7 @@ const uploadClient = new Twitter({
 })
 
 // ** Canvas Imports
-// import { createCanvas, loadImage, registerFont } from 'canvas'
+import { createCanvas, loadImage, registerFont } from 'canvas'
 
 export default async function handler(req, res) {
 
