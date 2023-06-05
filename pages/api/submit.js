@@ -88,7 +88,7 @@ export default async function submit(req, res) {
       try {
         await sendgrid.send({
           to: 'thesportsmetaverse@gmail.com',
-          from: 'thescoutlist@gmail.com',
+          from: 'info@lacuna-strategies.com',
           subject: `[Application Received from The Sports Metaverse]: @${body.twitter}`,
           html: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
           <html lang="en">
