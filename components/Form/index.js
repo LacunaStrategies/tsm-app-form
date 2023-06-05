@@ -81,7 +81,7 @@ const Form = ({ address, session, setPhase, setStatus, setValues, values }) => {
 
         try {
 
-            const resp = await axios.post('/api/submit', { ...values, wallet: address, twitter: session.twitter.twitterHandle })
+            const resp = await axios.post('/api/submit', { ...values, wallet: address, twitter: session.twitter.twitterHandle, twitterId: session.twitter.twitterId })
 
             console.log(resp.data)
 

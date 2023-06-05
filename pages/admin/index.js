@@ -15,9 +15,11 @@ const AdminPage = () => {
                 <li>
                     <Link href="/admin/manage-brackets"><a className="transition-all duration-300 underline text-blue-500 hover:text-blue-900">Manage Teams &amp; Users</a></Link>
                 </li>
+                {/* 
                 <li>
                     <Link href="/admin/twitterNotifications"><a className="transition-all duration-300 underline text-blue-500 hover:text-blue-900">Manage Twitter Notifications</a></Link>
-                </li>
+                </li> 
+                */}
             </ul>
         </div>
     )

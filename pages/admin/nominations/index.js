@@ -8,6 +8,7 @@ function Page() {
     const [nominations, setNominations] = useState([])
     const [viewApplication, setViewApplication] = useState()
     const [search, setSearch] = useState('')
+    const [submitting, setSubmitting] = useState(false)
 
     useEffect(() => {
         const getNominations = async () => {
@@ -21,30 +22,28 @@ function Page() {
     }, [])
 
     const approve = async (nominationId) => {
+        setSubmitting(true)
         try {
             const resp = await axios.put(`/api/approveNomination?nominationId=${nominationId}`)
             alert('Success! Page will need refresh to see changes.')
+            setSubmitting(false)
         } catch (err) {
             alert(err.response?.data.message || err.message)
             console.error(err)
+            setSubmitting(false)
         }
     }
 
     const reject = async (nominationId) => {
+        setSubmitting(true)
         try {
             const resp = await axios.put(`/api/rejectNomination?nominationId=${nominationId}`)
             alert('Success! Page will need refresh to see changes.')
+            setSubmitting(false)
         } catch (err) {
             alert(err.response?.data.message || err.message)
             console.error(err)
-        }
-    }
-
-    const toggleView = (nominationId) => {
-        if (viewApplication === nominationId) {
-            setViewApplication('')
-        } else {
-            setViewApplication(nominationId)
+            setSubmitting(false)
         }
     }
 
@@ -69,23 +68,33 @@ function Page() {
                                     className="border border-sportsBlue p-5 mb-4 flex items-center"
                                 >
                                     <div className="">
-                                    <div>
-                                        <strong>Twitter Handle: </strong>
-                                        <a href={`https://www.twitter.com/${nomination.twitterHandle}`} title={`Follow ${nomination.twitterHandle} on Twitter!`}>@{nomination.twitterHandle}</a>
+                                        <div>
+                                            <strong>Twitter Handle: </strong>
+                                            <a href={`https://www.twitter.com/${nomination.twitterHandle}`} title={`Follow ${nomination.twitterHandle} on Twitter!`}>@{nomination.twitterHandle}</a>
+                                        </div>
+                                        <div>
+                                            <strong>Nominated By: </strong>
+                                            <a href={`https://www.twitter.com/${nomination.nominatedBy}`} title={`Follow ${nomination.nominatedBy} on Twitter!`}>@{nomination.nominatedBy}</a>
+                                        </div>
+                                        <div>
+                                            <strong>Role: </strong>
+                                            {nomination.role}
+                                        </div>
                                     </div>
-                                    <div>
-                                        <strong>Nominated By: </strong>
-                                        <a href={`https://www.twitter.com/${nomination.nominatedBy}`} title={`Follow ${nomination.nominatedBy} on Twitter!`}>@{nomination.nominatedBy}</a>
-                                    </div>
-                                    <div>
-                                        <strong>Role: </strong>
-                                        {nomination.role}
-                                    </div>
-                                </div>
 
                                     <div className="flex">
-                                        <button onClick={() => approve(nomination._id)} className="ml-auto bg-green-700 py-2 px-3 text-white">Approve</button>
-                                        <button onClick={() => reject(nomination._id)} className="ml-4 bg-red-500 py-2 px-3 text-white">Reject</button>
+                                        <button
+                                            disabled={submitting}
+                                            onClick={() => approve(nomination._id)} className="ml-auto bg-green-700 py-2 px-3 text-white"
+                                        >
+                                            {submitting ? 'Please Wait...' : 'Approve'}
+                                        </button>
+                                        <button
+                                            disabled={submitting}
+                                            onClick={() => reject(nomination._id)} className="ml-4 bg-red-500 py-2 px-3 text-white"
+                                        >
+                                            {submitting ? 'Please Wait...' : 'Reject'}
+                                        </button>
                                     </div>
                                 </div>
                             )
@@ -95,7 +104,7 @@ function Page() {
                             <div
                                 key={nomination._id}
                                 className="border border-sportsBlue p-5 mb-4 flex items-center justify-between"
-                                >
+                            >
                                 <div className="">
                                     <div>
                                         <strong>Twitter Handle: </strong>
@@ -112,8 +121,18 @@ function Page() {
                                 </div>
 
                                 <div className="flex">
-                                    <button onClick={() => approve(nomination._id)} className="ml-auto bg-green-700 py-2 px-3 text-white">Approve</button>
-                                    <button onClick={() => reject(nomination._id)} className="ml-4 bg-red-500 py-2 px-3 text-white">Reject</button>
+                                    <button
+                                        disabled={submitting}
+                                        onClick={() => approve(nomination._id)} className="ml-auto bg-green-700 py-2 px-3 text-white"
+                                    >
+                                        {submitting ? 'Please Wait...' : 'Approve'}
+                                    </button>
+                                    <button
+                                        disabled={submitting}
+                                        onClick={() => reject(nomination._id)} className="ml-4 bg-red-500 py-2 px-3 text-white"
+                                    >
+                                        {submitting ? 'Please Wait...' : 'Reject'}
+                                    </button>
                                 </div>
                             </div>
                         )

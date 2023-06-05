@@ -14,7 +14,7 @@ import Link from 'next/link'
 import axios from 'axios'
 
 // ** Framer Motion Imports
-import { AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 
 
 
@@ -46,13 +46,10 @@ export default function MyTeam() {
     }
 
     const close = () => {
-        
         if (typeof window !== 'undefined') {
-            console.log('Set LS Variable')
             localStorage.setItem('tsm-wt', 'true')
         }
-
-        setWalkthrough(0)        
+        setWalkthrough(0)
         setModalOpen(false)
         setFormType('')
     }
@@ -60,10 +57,17 @@ export default function MyTeam() {
     const skipWalkthrough = () => {
         setWalkthrough(0)
         if (typeof window !== 'undefined') {
-            console.log('Set LS Variable')
             localStorage.setItem('tsm-wt', 'true')
         }
     }
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const skipWalkthrough = localStorage.getItem('tsm-wt')
+            if (!skipWalkthrough)
+                setWalkthrough(1)
+        }
+    }, [])
 
     useEffect(() => {
         const getBracketData = async () => {
@@ -114,10 +118,29 @@ export default function MyTeam() {
             <header className="absolute top-0 right-0">
                 <Connections address={address} session={session} />
             </header>
+            {
+                walkthrough === 1 && (
+                    <motion.button
+                        className="fixed top-[50px] left-1/2 -translate-x-1/2 text-6xl font-bold bg-sportsBlue text-white z-50 shadow-black shadow-lg py-2 px-5 rounded-md"
+                        onClick={() => setWalkthrough(2)}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.5, delay: 4.5 }}
+                    >NEXT</motion.button>
+                )
+            }
+            {
+                walkthrough === 2 && (
+                    <motion.button
+                        className="fixed top-[50px] left-1/2 -translate-x-1/2 text-6xl font-bold bg-sportsBlue text-white z-50 shadow-black shadow-lg py-2 px-5 rounded-md"
+                        onClick={() => setWalkthrough(2)}
+                    >Time to Nominate</motion.button>
+                )
+            }
             <div className="container mx-auto px-4 py-8">
                 <ApplicationAccepted
                     heading='Congratulations'
-                    subHeading='You Made The Cut 🎉'
+                    subHeading='You Made The Cut! 🎉'
                     content={`Welcome, ${bracketData.user.role}! ${bracketData.user.role === "Elite Scout" ? 'Your application has been selected.' : ' '} Now, the real fun starts!  ${(bracketData.user.role === "Elite Scout" || bracketData.user.role === "Senior Scout") ? 'Use chart below to BUILD YOUR TEAM.' : 'Start connecting with your team !'}`}
                 />
                 <Brackets

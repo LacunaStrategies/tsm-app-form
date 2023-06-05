@@ -12,24 +12,16 @@ const Brackets = ({ bracketData, walkthrough, setWalkthrough, skipWalkthrough, t
     const member1 = teamMembers.filter((member) => member.role === "Member" && member.nominatedBy === seniorScout1?.twitterHandle)[0]
     const member2 = teamMembers.filter((member) => member.role === "Member" && member.nominatedBy === seniorScout2?.twitterHandle)[0]
 
-    // Timeout Delay for 4 Seconds, Then Check for Walkthrough Local Storage Variable; If No Local Storage Variable, Trigger Walkthrough
-    useEffect(() => {
-        setTimeout(() => {
-            if (typeof window !== 'undefined') {
-                const skipWalkthrough = localStorage.getItem('tsm-wt')
-                if (skipWalkthrough !== 'true')
-                    setWalkthrough(1)
-            }
-        }, 4500)
-
-        
-    }, [setWalkthrough])
-
     return (
         <>
             {
                 walkthrough > 0 && (
-                    <motion.div className="fixed top-0 bottom-0 left-0 right-0 bg-black bg-opacity-75 z-10" initial={{ opacity: 0 }} animate={{ opacity: 0.75 }} transition={{ duration: 0.5 }}>
+                    <motion.div 
+                        className="fixed top-0 bottom-0 left-0 right-0 bg-black bg-opacity-75 z-10"
+                        initial={{ opacity: 0 }} 
+                        animate={{ opacity: 0.75 }} 
+                        transition={{ duration: 0.5, delay: 4.5 }}
+                    >
                         <button
                             onClick={() => skipWalkthrough()}
                             className="transition-all duration-300 fixed bottom-10 right-10 text-gray-300 hover:text-white text-3xl">Skip Walkthrough</button>
@@ -39,7 +31,7 @@ const Brackets = ({ bracketData, walkthrough, setWalkthrough, skipWalkthrough, t
             <motion.main
                 initial={{ opacity: 0, scale: 0.7, y: 120 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                transition={{ delay: 2, duration: 1.5 }}
+                transition={{ delay: 4, duration: 1.5 }}
                 className="text-white mt-12">
                 <div className="max-w-7xl mx-auto border-2 border-white rounded-3xl px-8 pt-4 pb-8 lg:py-20 flex flex-col justify-center">
 

@@ -1,6 +1,3 @@
-// ** React Imports
-import { useEffect, useState } from 'react';
-
 // ** Next Imports
 import Image from 'next/image'
 
@@ -52,8 +49,8 @@ const Connections = ({ address, session }) => {
                         alt="Twitter Icon"
                     />
                     <div className="mx-3">
-                        {session?.twitter.twitterHandle ? (
-                            session?.twitter.twitterHandle
+                        {session?.twitter?.twitterHandle ? (
+                            '@' + session?.twitter?.twitterHandle
                         ) : (
                             '...'
                         )}

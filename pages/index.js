@@ -25,6 +25,7 @@ import LightningBolt from '../components/LightningBolt'
 import Spacer from '../components/Spacer'
 import Confirmation from '../components/Confirmation'
 import Image from 'next/image'
+import Head from 'next/head'
 
 export default function Home() {
 
@@ -76,7 +77,7 @@ export default function Home() {
       const checkApplication = async () => {
         // Query database for applications associated with session twitterHandle
         const resp = await axios.get('/api/getSessionApplication')
-        
+
         // Set Status from response data [pending, approved, rejected, null]
         setStatus(resp.data.status)
 
@@ -101,7 +102,15 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center pt-[200px] pb-[50px] md:pt-[125px] md:pb-[125px] px-4">
-
+      <Head>
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+        <meta name="msapplication-TileColor" content="#da532c" />
+        <meta name="theme-color" content="#ffffff" />
+      </Head>
       {/* Top Section (Logo, Progress Bar, Connections) */}
       <header className="absolute w-full top-0 flex flex-wrap md:flex-nowrap items-center">
         <div className="hidden md:block md:w-1/3 text-center">

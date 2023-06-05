@@ -6,6 +6,8 @@ import axios from 'axios'
 
 const Leaderboard = () => {
 
+    const [sortAsc, setSortAsc] = useState(false)
+    const [sortBy, setSortBy] = useState("teamFollowers")
     const [pageLoading, setPageLoading] = useState(true)
     const [bracketData, setBracketData] = useState([])
     const [search, setSearch] = useState('')
@@ -28,12 +30,76 @@ const Leaderboard = () => {
         getBracketData()
     }, [])
 
+    /**
+     * * Sort Bracket Data Ascending
+     * @dev Sorts bracket data in ascending order based on supplied argument
+     * @param {string} sortBy 
+     * @param {boolean} ascending
+     */
+    const sortBracketData = (sortBy = "teamFollowers", ascending = true) => {
+        const bracketDataCopy = bracketData.map((bracket, i) => {
+            let teamFollowers = 0
+
+            bracket.team_members.forEach(function (v, i) {
+                teamFollowers += v.followers || 0
+            })
+
+            return { ...bracket, teamFollowers }
+        })
+
+        if (ascending) {
+            bracketDataCopy.sort((a,b) => (a[sortBy] > b[sortBy]) ? 1 : ((b[sortBy] > a[sortBy]) ? -1 : 0))
+        } else {
+            bracketDataCopy.sort((a,b) => (a[sortBy] < b[sortBy]) ? 1 : ((b[sortBy] < a[sortBy]) ? -1 : 0))
+        }
+
+        setBracketData(bracketDataCopy)
+        setSortAsc(ascending)
+    }
+
     return (
         <div className="bg-sportsBlue min-h-screen flex flex-col items-center justify-center">
             <header className="text-center">
                 <div className="container mx-auto px-4 mb-8">
                     <h1 className="text-3xl text-white uppercase mb-4">Leaderboard</h1>
-                    <input className="w-full py-3 px-2 border border-sportsGray" type="text" name="search" onChange={(e) => setSearch(e.target.value)} value={search} placeholder="Search..." />
+                    <div className="mb-8">
+                        <input className="py-3 px-2 w-full rounded-md border border-sportsGray" type="text" name="search" onChange={(e) => setSearch(e.target.value)} value={search} placeholder="Search..." />
+                    </div>
+                    <div className="flex items-center justify-center">
+                        <label
+                            htmlFor="sortBy"
+                            className="text-white mr-4"
+                        >
+                            Sort By:
+                        </label>
+                        <select
+                            name="sortBy"
+                            id="sortBy"
+                            className="relative h-12 pl-4 pr-8 text-neutral-800 rounded-l-md appearance-none"
+                            value={sortBy}
+                            onChange={(e) => setSortBy(e.target.value)}
+                        >
+                            <option value="name">Team Name</option>
+                            <option value="createdOn">Team Creation Date</option>
+                            <option value="teamFollowers">Total Followers</option>
+                        </select>
+                        <button
+                            onClick={() => sortBracketData(sortBy, !sortAsc)}
+                            className="p-3 rounded-r-md bg-neutral-400 text-white inline-block w-auto"
+                        >
+                            {
+                                sortAsc ? (
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-sort-down-alt" viewBox="0 0 16 16">
+                                        <path d="M3.5 3.5a.5.5 0 0 0-1 0v8.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L3.5 12.293V3.5zm4 .5a.5.5 0 0 1 0-1h1a.5.5 0 0 1 0 1h-1zm0 3a.5.5 0 0 1 0-1h3a.5.5 0 0 1 0 1h-3zm0 3a.5.5 0 0 1 0-1h5a.5.5 0 0 1 0 1h-5zM7 12.5a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7a.5.5 0 0 0-.5.5z" />
+                                    </svg>
+                                ) : (
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-sort-down" viewBox="0 0 16 16">
+                                        <path d="M3.5 2.5a.5.5 0 0 0-1 0v8.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L3.5 11.293V2.5zm3.5 1a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zM7.5 6a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zm0 3a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1z" />
+                                    </svg>
+                                )
+                            }
+                        </button>
+                    </div>
                 </div>
             </header>
             {
@@ -185,7 +251,7 @@ const Leaderboard = () => {
                 )
             }
         </div>
-    );
+    )
 }
 
 export default Leaderboard;

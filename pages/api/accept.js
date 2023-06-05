@@ -1,12 +1,17 @@
+// ** MongoDB Import
 import clientPromise from '/lib/mongodb'
-import { getToken } from 'next-auth/jwt'
+
+// ** NextAuth Imports
+import { getServerSession } from "next-auth/next"
+import { authOptions } from "./auth/[...nextauth]"
 
 export default async function handler(req, res) {
     const { method } = req
 
-    const token = await getToken({ req })
-    if (!token)
-        return res.status(401).json({ message: 'Please Connect Your Twitter!' })
+    // Verify active sesion before proceeding
+    const session = await getServerSession(req, res, authOptions)
+    if (!session)
+        return res.status(401).json({ message: 'Twitter connection is required to accept your nomination!' })
 
     const client = await clientPromise
     const db = client.db('sports')
@@ -14,24 +19,21 @@ export default async function handler(req, res) {
     switch (method) {
         case 'POST':
 
-        console.log(token)
-
-            const updatedUser = await db.collection('members').updateOne(
-                { twitterHandle: token.userProfile.twitterHandle },
+            const updatedUser = await db.collection('scoutlist').updateOne(
+                { twitterId: session.twitter.twitterId },
                 {
                     $set: {
-                        status: 'accepted',
-                        profilePic: token.picture,
+                        status: 'accepted'
                     }
                 }
             )
 
             if (!updatedUser.matchedCount)
-                return res.status(401).json({ message: 'User Not Found!' })
-            
-            res.status(200).json({ ok: true })
+                return res.status(401).json({ success: false, message: 'User Not Found!' })
 
-            break;
+            res.status(200).json({ success: true })
+
+            break
 
         default:
             res.setHeader('Allow', ['POST'])

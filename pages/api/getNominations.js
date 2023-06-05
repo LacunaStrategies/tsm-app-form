@@ -8,7 +8,7 @@ export default async function handler(req, res) {
 
     switch (method) {
         case 'GET':
-            const nominations = await db.collection('members').find({ status: 'nominated' }).toArray()
+            const nominations = await db.collection('scoutlist').find({ status: 'nominated' }).toArray()
             res.status(200).json({ nominations })
 
             break;

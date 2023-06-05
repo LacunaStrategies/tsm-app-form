@@ -9,6 +9,7 @@ function Page() {
     const [loading, setLoading] = useState(true)
     const [viewApplication, setViewApplication] = useState()
     const [search, setSearch] = useState('')
+    const [submitting, setSubmitting] = useState(false)
 
     useEffect(() => {
         const getApplications = async () => {
@@ -22,22 +23,29 @@ function Page() {
     }, [])
 
     const approve = async (applicationId) => {
+        setSubmitting(true)
         try {
-            const resp = await axios.put(`/api/approveApplication?applicationId=${applicationId}`)
+            const resp = await axios.post(`/api/approveApplication?applicationId=${applicationId}`)
+            console.log(resp)
             alert('Success! Page will need refresh to see changes.')
+            setSubmitting(false)
         } catch (err) {
             alert(err.response?.data.message || err.message)
             console.error(err)
+            setSubmitting(false)
         }
     }
 
     const reject = async (applicationId) => {
+        setSubmitting(true)
         try {
             const resp = await axios.put(`/api/rejectApplication?applicationId=${applicationId}`)
             alert('Success! Page will need refresh to see changes.')
+            setSubmitting(false)
         } catch (err) {
             alert(err.response?.data.message || err.message)
             console.error(err)
+            setSubmitting(false)
         }
     }
 
@@ -105,8 +113,18 @@ function Page() {
                                     }
                                     <div className="flex">
                                         <button onClick={() => toggleView(application._id)}>{viewApplication === application._id ? 'Hide Answers' : 'Show Answers'}</button>
-                                        <button onClick={() => approve(application._id)} className="ml-auto bg-green-700 py-2 px-3 text-white">Approve</button>
-                                        <button onClick={() => reject(application._id)} className="ml-4 bg-red-500 py-2 px-3 text-white">Reject</button>
+                                        <button
+                                            disabled={submitting}
+                                            onClick={() => approve(application._id)} className="ml-auto bg-green-700 py-2 px-3 text-white"
+                                        >
+                                            {submitting ? 'Please Wait...' : 'Approve'}
+                                        </button>
+                                        <button
+                                            disabled={submitting}
+                                            onClick={() => reject(application._id)} className="ml-4 bg-red-500 py-2 px-3 text-white"
+                                        >
+                                            {submitting ? 'Please Wait...' : 'Reject'}
+                                        </button>
                                     </div>
                                 </div>
                             )
@@ -152,8 +170,18 @@ function Page() {
                                 }
                                 <div className="flex">
                                     <button onClick={() => toggleView(application._id)}>{viewApplication === application._id ? 'Hide Answers' : 'Show Answers'}</button>
-                                    <button onClick={() => approve(application._id)} className="ml-auto bg-green-700 py-2 px-3 text-white">Approve</button>
-                                    <button onClick={() => reject(application._id)} className="ml-4 bg-red-500 py-2 px-3 text-white">Reject</button>
+                                    <button
+                                        disabled={submitting}
+                                        onClick={() => approve(application._id)} className="ml-auto bg-green-700 py-2 px-3 text-white"
+                                    >
+                                        {submitting ? 'Please Wait...' : 'Approve'}
+                                    </button>
+                                    <button
+                                        disabled={submitting}
+                                        onClick={() => reject(application._id)} className="ml-4 bg-red-500 py-2 px-3 text-white"
+                                    >
+                                        {submitting ? 'Please Wait...' : 'Reject'}
+                                    </button>
                                 </div>
                             </div>
                         )

@@ -7,6 +7,12 @@ import { authOptions } from "./auth/[...nextauth]"
 
 // ** Twitter Lite Import
 import Twitter from 'twitter-lite'
+const twitterClient = new Twitter({
+  consumer_key: process.env.TWITTER_API_KEY,
+  consumer_secret: process.env.TWITTER_API_SECRET,
+  access_token_key: process.env.TWITTER_ACCESS_TOKEN,
+  access_token_secret: process.env.TWITTER_ACCESS_SECRET
+})
 
 // ** Sendgrid Mail Import
 import sendgrid from '@sendgrid/mail'
@@ -48,49 +54,41 @@ export default async function submit(req, res) {
         return res.status(400).json({ failedValidation: true, message: invalidFields })
 
       // Prevent duplicate entries
-      const findApplication = await db.collection('applications').findOne({ twitter: body.twitter })
+      const findApplication = await db.collection('applications').findOne({ twitter: body.twitterId })
 
       if (findApplication)
-        return res.status(400).json({ message: `Application already exists for ${body.twitter}` })
+        return res.status(400).json({ message: `Application already exists for ${body.twitter} [id: ${body.twitterId}]` })
 
       // Subit new application
-      await db.collection('applications').insertOne({ ...body, status: 'Pending', profilePic: session.user.image })
+      await db.collection('applications').insertOne({ ...body, status: 'Pending', profilePic: session.user.image.replace('normal','400x400') })
 
-      // Trigger Twitter notification to Admins
-      const t = new Twitter({
-        consumer_key: process.env.LSDEVLABSAPP_TWITTER_API_KEY,
-        consumer_secret: process.env.LSDEVLABSAPP_TWITTER_API_SECRET,
-        access_token_key: process.env.LSDEVLABSBOT_TWITTER_ACCESS_TOKEN,
-        access_token_secret: process.env.LSDEVLABSBOT_TWITTER_ACCESS_TOKEN_SECRET
-      })
+      //// Trigger Twitter DM Notification to Admins
+      // const parameters = {
+      //   event: {
+      //     type: 'message_create',
+      //     message_create: {
+      //       target: {
+      //         recipient_id: '' // Enter Twitter ID
+      //       },
+      //       message_data: {
+      //         text: `New Application Received from @${body.twitter}! Head to your /admin/applications page and approve/reject it now!`
+      //       }
+      //     }
+      //   }
+      // }
 
-      const parameters = {
-        event: {
-          type: 'message_create',
-          message_create: {
-            target: {
-              recipient_id: '1509533708927205379'
-            },
-            message_data: {
-              text: `New Application Received from @${body.twitter}! Head to your /admin/applications page and approve/reject it now!`
-            }
-          }
-        }
-      }
-
-      try {
-        const resp = await t.post('direct_messages/events/new', parameters)
-        console.log(resp)
-      } catch (err) {
-        console.log(err)
-        errors.push(err)
-      }
+      // try {
+      //   const resp = await twitterClient.post('direct_messages/events/new', parameters)
+      // } catch (err) {
+      //   console.log('Error Sending Direct Message via Twitter API => ', err)
+      //   errors.push(err)
+      // }
 
       // Trigger Email Notification
       try {
         await sendgrid.send({
-          to: 'lacunadevlabs@gmail.com',
-          from: 'info@lacuna-strategies.com',
+          to: 'thesportsmetaverse@gmail.com',
+          from: 'thescoutlist@gmail.com',
           subject: `[Application Received from The Sports Metaverse]: @${body.twitter}`,
           html: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
           <html lang="en">

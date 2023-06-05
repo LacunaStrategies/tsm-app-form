@@ -11,18 +11,18 @@ export default async function getApplications(req, res) {
             const brackets = await db.collection('teams').aggregate([
                 {
                     $lookup:
-                        {
-                            from: 'members',
-                            localField: "_id",
-                            foreignField: "teamId",
-                            as: "team_members"
-                        }
+                    {
+                        from: 'scoutlist',
+                        localField: "_id",
+                        foreignField: "teamId",
+                        as: "team_members"
+                    }
                 }
             ]).toArray()
 
             res.status(200).json({ brackets })
 
-            break;
+            break
 
         default:
             res.setHeader('Allow', ['GET'])

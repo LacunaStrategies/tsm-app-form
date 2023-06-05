@@ -10,7 +10,7 @@ const ApplicationAccepted = ({ heading, subHeading, content }) => {
             <motion.h2
                 initial={{ opacity: 1, scale: 1, y: 0 }}
                 animate={{ opacity: 0, scale: 0.7, height: 0, marginBottom: 0, y: -75}}
-                transition={{ delay: 2, duration: 1.5 }}
+                transition={{ delay: 4, duration: 1.5 }}
                 className="text-xl font-semibold mb-2 uppercase sm:text-4xl md:text-5xl sm:mb-4 md:mb-8"
             >
                 {heading}

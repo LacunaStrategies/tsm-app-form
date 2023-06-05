@@ -1,11 +1,18 @@
 // ** MongoDB Import
 import clientPromise from '/lib/mongodb'
 
-// ** Next Auth Import
-import { getToken } from 'next-auth/jwt'
+// ** NextAuth Imports
+import { getServerSession } from "next-auth/next"
+import { authOptions } from "./auth/[...nextauth]"
 
 // ** Twitter Import
 import Twitter from 'twitter-lite'
+const twitterClient = new Twitter({
+    consumer_key: process.env.TWITTER_API_KEY,
+    consumer_secret: process.env.TWITTER_API_SECRET,
+    access_token_key: process.env.TWITTER_ACCESS_TOKEN,
+    access_token_secret: process.env.TWITTER_ACCESS_SECRET
+})
 
 // ** SendGrid Import
 import sendgrid from '@sendgrid/mail'
@@ -22,10 +29,10 @@ export default async function handler(req, res) {
     member = member.replace('@', '').replace(/\s+/g, '')
     type = type.trim()
 
-    // Verify that user has a valid session
-    const token = await getToken({ req })
-    if (!token)
-        return res.status(401).json({ message: 'Invalid User Request!' })
+    // Verify active sesion before proceeding
+    const session = await getServerSession(req, res, authOptions)
+    if (!session)
+        return res.status(401).json({ message: 'Twitter connection is required for this application!' })
 
     // Connect to Database
     const client = await clientPromise
@@ -49,7 +56,7 @@ export default async function handler(req, res) {
                 return res.status(400).json({ message: 'Please submit a Member nomination!' })
 
             // Get User Data
-            const user = await db.collection('members').findOne({ twitterHandle: token.userProfile.twitterHandle })
+            const user = await db.collection('scoutlist').findOne({ twitterId: session.twitter.twitterId })
 
             // Verify API request came from a valid user
             if (!user || user.status !== "accepted")
@@ -63,7 +70,7 @@ export default async function handler(req, res) {
             const team = await db.collection('teams').findOne({ _id: user.teamId })
 
             // Get Team Members Data
-            const teamMembers = await db.collection('members').find({ teamId: team._id }).toArray()
+            const teamMembers = await db.collection('scoutlist').find({ teamId: team._id }).toArray()
 
             // Set Current Team Member Counts
             const seniorScouts = teamMembers.filter(obj => obj.role === "Senior Scout").length
@@ -75,7 +82,7 @@ export default async function handler(req, res) {
                 return res.status(400).json({ message: `You have no ${type} nomination seats remaining!` })
 
             // Verify nomination does not include existing nominees
-            const verifyNominees = await db.collection('members').find({
+            const verifyNominees = await db.collection('scoutlist').find({
                 $or: [
                     { twitterHandle: seniorScout1 },
                     { twitterHandle: seniorScout2 },
@@ -121,69 +128,62 @@ export default async function handler(req, res) {
                     {
                         role: type,
                         twitterHandle: seniorScout1,
-                        nominatedBy: token.userProfile.twitterHandle,
+                        nominatedBy: session.twitter.twitterHandle,
                         status: 'nominated',
                         teamId: team._id,
                     },
                     {
                         role: type,
                         twitterHandle: seniorScout2,
-                        nominatedBy: token.userProfile.twitterHandle,
+                        nominatedBy: session.twitter.twitterHandle,
                         status: 'nominated',
                         teamId: team._id,
                     },
                 ]
-                await db.collection('members').insertMany(insertData)
+                await db.collection('scoutlist').insertMany(insertData)
             } else if (type === "Member") {
                 insertData = [
                     {
                         role: type,
                         twitterHandle: member,
-                        nominatedBy: token.userProfile.twitterHandle,
+                        nominatedBy: session.twitter.twitterHandle,
                         status: 'nominated',
                         teamId: team._id,
                     }
                 ]
-                await db.collection('members').insertOne(insertData[0])
+                await db.collection('scoutlist').insertOne(insertData[0])
             }
 
-            // Trigger Twitter notification to Admins
-            const t = new Twitter({
-                consumer_key: process.env.LSDEVLABSAPP_TWITTER_API_KEY,
-                consumer_secret: process.env.LSDEVLABSAPP_TWITTER_API_SECRET,
-                access_token_key: process.env.LSDEVLABSBOT_TWITTER_ACCESS_TOKEN,
-                access_token_secret: process.env.LSDEVLABSBOT_TWITTER_ACCESS_TOKEN_SECRET
-            })
+            // // Create Twitter DM Notification Message for Admin User
+            // const dmText = type === "Senior Scout" ? `New nominations received for @${seniorScout1} and @${seniorScout2}! Head to /admin/nominations to approve/reject them now!` : `New nomination received for @${member}! Head to /admin/nominations to approve/reject it now!`
 
-            const dmText = type === "Senior Scout" ? `New nominations received for @${seniorScout1} and @${seniorScout2}! Head to /admin/nominations to approve/reject them now!` : `New nomination received for @${member}! Head to /admin/nominations to approve/reject it now!`
+            // const parameters = {
+            //     event: {
+            //         type: 'message_create',
+            //         message_create: {
+            //             target: {
+            //                 recipient_id: '' // Enter Twitter ID
+            //             },
+            //             message_data: {
+            //                 text: dmText
+            //             }
+            //         }
+            //     }
+            // }
 
-            const parameters = {
-                event: {
-                    type: 'message_create',
-                    message_create: {
-                        target: {
-                            recipient_id: '1509533708927205379'
-                        },
-                        message_data: {
-                            text: dmText
-                        }
-                    }
-                }
-            }
-
-            try {
-                const resp = await t.post('direct_messages/events/new', parameters)
-                console.log(resp)
-            } catch (err) {
-                console.log(err)
-                errors.push(err)
-            }
+            // try {
+            //     const resp = await twitterClient.post('direct_messages/events/new', parameters)
+            //     // console.log(resp)
+            // } catch (err) {
+            //     console.log(err)
+            //     errors.push(err)
+            // }
 
             try {
                 await sendgrid.send({
-                    to: 'lacunadevlabs@gmail.com',
-                    from: 'info@lacuna-strategies.com',
-                    subject: `[Nomination Received from The Sports Metaverse]: @${token.userProfile.twitterHandle}`,
+                    to: 'thesportsmetaverse@gmail.com',
+                    from: 'thescoutlist@gmail.com',
+                    subject: `[Nomination Received from The Sports Metaverse]: @${session.twitter.twitterHandle}`,
                     html: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
                             <html lang="en">
                             <head>
@@ -196,7 +196,7 @@ export default async function handler(req, res) {
                             
                             <body>
                                 <div class="container" style="margin-left: 20px;margin-right: 20px;">
-                                <h3>You've received a new Nomination from @${token.userProfile.twitterHandle}</h3>
+                                <h3>You've received a new Nomination from @${session.twitter.twitterHandle}</h3>
                                 <div style="font-size: 16px;">
                                     <p><strong>Nomination Type:</strong> ${type}</p>
                                     ${seniorScout1 !== '' ? `<p><strong>Senior Scout Nominee:</strong> @${seniorScout1}</p>` : ''}
