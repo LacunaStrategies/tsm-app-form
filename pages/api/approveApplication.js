@@ -154,11 +154,11 @@ export default async function handler(req, res) {
 
     // Fill bottom drop shadow
     context.fillStyle = 'rgba(0,0,0,0.3)'
-    context.fillText(text, width - 63, 333)
+    context.fillText(text, width - 67, 327)
 
     // Fill top drop shadow
     context.fillStyle = 'rgba(0,0,0,0.7)'
-    context.fillText(text, width - 67, 326)
+    context.fillText(text, width - 69, 323)
 
     // Fill text
     context.fillStyle = '#fec920'
@@ -168,10 +168,10 @@ export default async function handler(req, res) {
     text = 'Scout'
 
     context.fillStyle = 'rgba(0,0,0,0.3)'
-    context.fillText(text, width - 63, 421)
+    context.fillText(text, width - 67, 415)
 
     context.fillStyle = 'rgba(0,0,0,0.7)'
-    context.fillText(text, width - 67, 414)
+    context.fillText(text, width - 69, 411)
 
     context.fillStyle = '#fff'
     context.fillText(text, width - 71, 407)
@@ -180,10 +180,10 @@ export default async function handler(req, res) {
     text = 'Elite'
 
     context.fillStyle = 'rgba(0,0,0,0.3)'
-    context.fillText(text, width - 257, 421)
+    context.fillText(text, width - 261, 415)
 
     context.fillStyle = 'rgba(0,0,0,0.7)'
-    context.fillText(text, width - 261, 414)
+    context.fillText(text, width - 263, 411)
 
     context.fillStyle = '#fec920'
     context.fillText(text, width - 265, 407)
@@ -192,10 +192,10 @@ export default async function handler(req, res) {
     text = 'Welcome'
 
     context.fillStyle = 'rgba(0,0,0,0.3)'
-    context.fillText(text, width - 416, 421)
+    context.fillText(text, width - 420, 415)
 
     context.fillStyle = 'rgba(0,0,0,0.7)'
-    context.fillText(text, width - 420, 414)
+    context.fillText(text, width - 422, 411)
 
     context.fillStyle = '#fff'
     context.fillText(text, width - 424, 407)
