@@ -54,7 +54,7 @@ export default async function submit(req, res) {
         return res.status(400).json({ failedValidation: true, message: invalidFields })
 
       // Prevent duplicate entries
-      const findApplication = await db.collection('applications').findOne({ twitter: body.twitterId })
+      const findApplication = await db.collection('applications').findOne({ twitterId: body.twitterId })
 
       if (findApplication)
         return res.status(400).json({ message: `Application already exists for ${body.twitter} [id: ${body.twitterId}]` })
