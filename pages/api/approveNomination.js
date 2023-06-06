@@ -44,12 +44,12 @@ export default async function handler(req, res) {
                 return res.status(401).json({ message: 'Twitter connection is required to authenticate your application!' })
 
             // Fetch nominee data from DB
-            const nominee = await db.collection('members').findOne({ _id: ObjectId(nominationId) })
+            const nominee = await db.collection('scoutlist').findOne({ _id: ObjectId(nominationId) })
             if (!nominee || nominee?.status === 'approved' || nominee?.status === 'accepted')
                 return res.status(400).json({ message: 'Nominee not found or has already been approved/accepted!' })
 
             // Fetch nominator data from DB
-            const nominator = await db.collection('members').findOne({ twitterHandle: nominee.nominatedBy })
+            const nominator = await db.collection('scoutlist').findOne({ twitterHandle: nominee.nominatedBy })
 
             // Fetch nominee data from Twitter API
             let nomineeTwitterUserData = {}
@@ -66,7 +66,7 @@ export default async function handler(req, res) {
             const nomineeTwitterId = nomineeTwitterUserData.id_str
 
             // Approve nomination
-            const approvednomination = await db.collection('members').updateOne(
+            const approvednomination = await db.collection('scoutlist').updateOne(
                 { _id: ObjectId(nominationId) },
                 {
                     $set:
